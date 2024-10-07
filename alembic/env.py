@@ -1,3 +1,4 @@
+import alembic_autogenerate_enums # noqa
 import asyncio
 from logging.config import fileConfig
 

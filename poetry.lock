@@ -20,6 +20,17 @@ typing-extensions = ">=4"
 tz = ["backports.zoneinfo"]
 
 [[package]]
+name = "alembic-autogenerate-enums"
+version = "0.1.2"
+description = "Alembic hook that allows enums values to be upgraded and downgraded in migrations automatically"
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "alembic-autogenerate-enums-0.1.2.tar.gz", hash = "sha256:467adc76f1ef32576e514ef55c400c28900547800b676dec349293519751c128"},
+    {file = "alembic_autogenerate_enums-0.1.2-py3-none-any.whl", hash = "sha256:07b8fa63b2fca107effc61d3dc86d7ff848dd73b0e6cc9c292e904edcaeb8278"},
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.7.0"
 description = "Reusable constraint types to use with typing.Annotated"
@@ -1449,4 +1460,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ec5d86064ed71bcc6300ee3122780ab33d79f3a71f6d9620fd0ce792ba6b27c2"
+content-hash = "86a0505d9c34e1f8d8f8e5dda9a3e17a8fc933bf3582c18f375eb63c97ba09b6"

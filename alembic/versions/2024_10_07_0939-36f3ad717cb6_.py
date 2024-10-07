@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 07023e626c06
+Revision ID: 36f3ad717cb6
 Revises: 
-Create Date: 2024-10-07 08:15:48.604314
+Create Date: 2024-10-07 09:39:49.722270
 
 """
 from typing import Sequence, Union
@@ -11,7 +11,7 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision: str = '07023e626c06'
+revision: str = '36f3ad717cb6'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -22,7 +22,9 @@ def upgrade() -> None:
     op.create_table('movies',
                     sa.Column('name', sa.String(length=256), nullable=False),
                     sa.Column('description', sa.String(), nullable=False),
-                    sa.Column('age_restrictions', sa.Integer(), nullable=False),
+                    sa.Column('age_restrictions',
+                              sa.Enum('ZERO', 'SIX', 'TWELVE', 'SIXTEEN', 'EIGHTEEN', name='agerestrictionsenum'),
+                              nullable=False),
                     sa.Column('release_year', sa.Integer(), nullable=False),
                     sa.Column('rating', sa.Float(), nullable=True),
                     sa.Column('duration', sa.Integer(), nullable=False),
