@@ -1,6 +1,9 @@
+from datetime import datetime
 from enum import  Enum
 
-from pydantic import BaseModel
+from fastapi import HTTPException
+from pydantic import BaseModel, field_validator
+from starlette import status
 
 
 class AgeCategory(int, Enum):
@@ -20,6 +23,15 @@ class MovieRequestSchema(BaseModel):
 
     class Config:
         use_enum_values = True
+
+    @field_validator('release_year')
+    def validate_release_year(cls, release_year: int):
+        current_year = datetime.now().year
+        if release_year > current_year:
+            raise HTTPException(
+                detail='Release year cannot be greater than the current year', status_code=status.HTTP_400_BAD_REQUEST
+            )
+        return release_year
 
 
 class MovieResponseSchema(BaseModel):
