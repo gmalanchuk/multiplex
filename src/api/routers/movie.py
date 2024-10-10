@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -23,7 +23,17 @@ async def post_movie(
         request_movie: MovieRequestSchema,
         session: AsyncSession = Depends(get_async_session)
 ):
-    movie = Movie(**request_movie.model_dump())
+    movie_data = request_movie.model_dump()
+
+    query = select(Movie).where(Movie.name == movie_data["name"])
+    result = (await session.execute(query)).scalars().first()
+    if result:
+        raise HTTPException(
+            detail=f"Movie with this name already exists",
+            status_code=status.HTTP_409_CONFLICT,
+        )
+
+    movie = Movie(**movie_data)
     session.add(movie)
     await session.commit()
     return movie
