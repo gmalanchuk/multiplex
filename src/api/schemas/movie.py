@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from enum import  Enum
 
 from fastapi import HTTPException
@@ -19,6 +19,8 @@ class MovieRequestSchema(BaseModel):
     description: str
     age_category: AgeCategory
     release_year: int
+    release_start_date: date
+    release_end_date: date
     duration: int
 
     class Config:
@@ -40,5 +42,6 @@ class MovieResponseSchema(BaseModel):
     description: str
     age_category: int
     release_year: int
-    rating: float | None
+    release_start_date: date
+    release_end_date: date
     duration: int

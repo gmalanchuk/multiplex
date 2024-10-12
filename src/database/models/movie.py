@@ -1,3 +1,5 @@
+from datetime import date
+
 from sqlalchemy.orm import Mapped
 from sqlalchemy.testing.schema import mapped_column
 
@@ -11,5 +13,8 @@ class Movie(Base, TimeStampMixin):
     description: Mapped[str] = mapped_column(nullable=False)
     age_category: Mapped[int] = mapped_column(nullable=False)
     release_year: Mapped[int] = mapped_column(nullable=False)
-    rating: Mapped[float] = mapped_column(nullable=True)  # todo от 0 до 10
+    release_start_date: Mapped[date] = mapped_column(nullable=False)
+    release_end_date: Mapped[date] = mapped_column(nullable=False)
+    # todo рейтинг зрителей
+    # todo рейтинг критиков
     duration: Mapped[int] = mapped_column(nullable=False)

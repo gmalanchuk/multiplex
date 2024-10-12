@@ -12,7 +12,7 @@ movie_router = APIRouter(prefix="/v1/movies", tags=["Movies"])
 
 
 @movie_router.get(path="/", response_model=list[MovieResponseSchema])
-async def get_movies(session: AsyncSession = Depends(get_async_session)):
+async def get_movies(session: AsyncSession = Depends(get_async_session)): # todo сделать фильтрацию
     result = await session.execute(select(Movie))
     movies = result.scalars().all()
     return movies
