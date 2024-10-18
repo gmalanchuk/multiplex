@@ -23,3 +23,11 @@ async def create_movie(
         movie_service: Annotated[MovieService, Depends()],
 ):
     return await movie_service.create_movie(request_movie)
+
+
+@movie_router.get(path="/{movie_id}/", response_model=MovieResponseSchema)
+async def get_movie(
+        movie_id: int,
+        movie_service: Annotated[MovieService, Depends()],
+):
+    return await movie_service.get_movie(movie_id)

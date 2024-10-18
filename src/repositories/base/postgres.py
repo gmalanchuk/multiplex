@@ -14,15 +14,15 @@ class PostgresRepository(AbstractRepository):
             result = await session.execute(query)
             return result.scalars().all()
 
-    async def get_one(self, **kwargs):
-        async with async_session() as session:
-            query = select(self.model).filter_by(**kwargs)
-            result = await session.execute(query)
-            return result.scalar_one_or_none()
-
     async def add_one(self, data: dict):
         async with async_session() as session:
             obj = self.model(**data)
             session.add(obj)
             await session.commit()
             return obj
+
+    async def get_one(self, **kwargs):
+        async with async_session() as session:
+            query = select(self.model).filter_by(**kwargs)
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
