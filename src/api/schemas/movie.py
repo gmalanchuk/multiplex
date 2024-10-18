@@ -19,8 +19,8 @@ class MovieRequestSchema(BaseModel):
     description: str
     age_category: AgeCategory
     release_year: int
-    release_start_date: date
-    release_end_date: date
+    rental_start_date: date
+    rental_end_date: date
     duration: int
 
     class Config:
@@ -42,6 +42,6 @@ class MovieResponseSchema(BaseModel):
     description: str
     age_category: int
     release_year: int
-    release_start_date: date
-    release_end_date: date
+    rental_start_date: date
+    rental_end_date: date
     duration: int

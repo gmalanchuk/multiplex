@@ -13,8 +13,9 @@ class Movie(Base, TimeStampMixin):
     description: Mapped[str] = mapped_column(nullable=False)
     age_category: Mapped[int] = mapped_column(nullable=False)
     release_year: Mapped[int] = mapped_column(nullable=False)
-    release_start_date: Mapped[date] = mapped_column(nullable=False)
-    release_end_date: Mapped[date] = mapped_column(nullable=False)
+    rental_start_date: Mapped[date] = mapped_column(nullable=False)
+    rental_end_date: Mapped[date] = mapped_column(nullable=False)
     # todo рейтинг зрителей
     # todo рейтинг критиков
+    # todo жанры
     duration: Mapped[int] = mapped_column(nullable=False)
