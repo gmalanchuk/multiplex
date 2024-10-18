@@ -6,10 +6,9 @@ class MovieService:
     def __init__(self):
         self.movie_repository = MovieRepository()
 
-
     async def get_movies(self):
-        # todo реализовать
-        pass
+        # todo фильтрация, пагинация
+        return await self.movie_repository.get_all()
 
     async def create_movie(self, movie: MovieRequestSchema):
         # todo сделать валидацию, что такой фильм уже есть
