@@ -42,9 +42,9 @@ async def update_movie(
     return await movie_service.update_movie(movie_id, request_movie)
 
 
-# @movie_router.delete(path="/{movie_id}/", status_code=status.HTTP_204_NO_CONTENT)
-# async def delete_movie(
-#         movie_id: int,
-#         movie_service: Annotated[MovieService, Depends()],
-# ):
-#     return await movie_service.delete_movie(movie_id)
+@movie_router.delete(path="/{movie_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_movie(
+        movie_id: int,
+        movie_service: Annotated[MovieService, Depends()],
+):
+    return await movie_service.delete_movie(movie_id)

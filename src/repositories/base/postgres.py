@@ -38,3 +38,14 @@ class PostgresRepository(AbstractRepository):
                 setattr(obj, key, value)
             await session.commit()
             return obj
+
+    async def delete_one(self, **kwargs):
+        async with async_session() as session:
+            query = select(self.model).filter_by(**kwargs)
+            result = await session.execute(query)
+            obj = result.scalar_one_or_none()
+            if obj is None:
+                return None
+            await session.delete(obj)
+            await session.commit()
+            return obj

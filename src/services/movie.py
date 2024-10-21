@@ -31,3 +31,9 @@ class MovieService:
         if movie is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")  # todo временное решение
         return movie
+
+    async def delete_movie(self, movie_id: int):
+        movie = await self.movie_repository.delete_one(id=movie_id)
+        if movie is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")  # todo временное решение
+        return None
