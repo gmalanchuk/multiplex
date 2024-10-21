@@ -26,3 +26,15 @@ class PostgresRepository(AbstractRepository):
             query = select(self.model).filter_by(**kwargs)
             result = await session.execute(query)
             return result.scalar_one_or_none()
+
+    async def update_one(self, obj_id: int, data: dict):
+        async with async_session() as session:
+            query = select(self.model).filter_by(id=obj_id)
+            result = await session.execute(query)
+            obj = result.scalar_one_or_none()
+            if obj is None:
+                return None
+            for key, value in data.items():
+                setattr(obj, key, value)
+            await session.commit()
+            return obj
