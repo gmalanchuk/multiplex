@@ -1,20 +1,20 @@
 from src.api.schemas.movie import MovieCreateRequestSchema, MovieUpdateRequestSchema
 from src.exceptions import NotFoundException, MovieAlreadyExistsException
 from src.repositories.movie import MovieRepository
+from src.validators.movie import MovieValidator
 
 
 class MovieService:
     def __init__(self):
         self.movie_repository = MovieRepository()
+        self.movie_validator = MovieValidator()
 
     async def get_movies(self):
         # todo фильтрация, пагинация
         return await self.movie_repository.get_all()
 
     async def create_movie(self, movie: MovieCreateRequestSchema):
-        existing_movie = await self.movie_repository.get_one(name=movie.name)  # todo сделать для этого специальный валидатор
-        if existing_movie is not None:
-            raise MovieAlreadyExistsException
+        await self.movie_validator.movie_already_exists(movie_name=movie.name)
         return await self.movie_repository.add_one(data=movie.model_dump())
 
     async def get_movie(self, movie_id: int):
@@ -24,9 +24,7 @@ class MovieService:
         return movie
 
     async def update_movie(self, movie_id: int, movie: MovieUpdateRequestSchema):
-        existing_movie = await self.movie_repository.get_one(name=movie.name)  # todo сделать для этого специальный валидатор
-        if existing_movie is not None and existing_movie.id != movie_id:
-            raise MovieAlreadyExistsException
+        await self.movie_validator.movie_already_exists(movie_name=movie.name, movie_id=movie_id)
         update_data = {k: v for k, v in movie.model_dump().items() if v is not None}  # todo временное решение
         movie = await self.movie_repository.update_one(obj_id=movie_id, data=update_data)
         if movie is None:
