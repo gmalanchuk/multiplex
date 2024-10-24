@@ -25,7 +25,7 @@ class MovieService:
 
     async def update_movie(self, movie_id: int, movie: MovieUpdateRequestSchema):
         await self.movie_validator.movie_already_exists(movie_name=movie.name, movie_id=movie_id)
-        update_data = {k: v for k, v in movie.model_dump().items() if v is not None}  # todo временное решение
+        update_data = movie.model_dump(exclude_none=True)
         movie = await self.movie_repository.update_one(obj_id=movie_id, data=update_data)
         if movie is None:
             raise NotFoundException

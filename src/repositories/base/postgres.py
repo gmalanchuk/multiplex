@@ -28,24 +28,20 @@ class PostgresRepository(AbstractRepository):
             return result.scalar_one_or_none()
 
     async def update_one(self, obj_id: int, data: dict):
+        obj = await self.get_one(id=obj_id)
+        if obj is None:
+            return None
+        for key, value in data.items():
+            setattr(obj, key, value)
         async with async_session() as session:
-            query = select(self.model).filter_by(id=obj_id)
-            result = await session.execute(query)
-            obj = result.scalar_one_or_none()
-            if obj is None:
-                return None
-            for key, value in data.items():
-                setattr(obj, key, value)
             await session.commit()
-            return obj
+        return obj
 
     async def delete_one(self, **kwargs):
+        obj = await self.get_one(**kwargs)
+        if obj is None:
+            return None
         async with async_session() as session:
-            query = select(self.model).filter_by(**kwargs)
-            result = await session.execute(query)
-            obj = result.scalar_one_or_none()
-            if obj is None:
-                return None
             await session.delete(obj)
             await session.commit()
-            return obj
+        return obj
