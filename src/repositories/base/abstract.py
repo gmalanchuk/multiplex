@@ -10,3 +10,5 @@ class AbstractRepository(ABC):
     @abstractmethod
     async def add_one(self, *args: Any, **kwargs: Any) -> NoReturn:
         raise NotImplementedError
+
+    # todo определить остальные методы

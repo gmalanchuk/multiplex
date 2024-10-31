@@ -10,7 +10,7 @@ class MovieService:
         self.movie_validator = MovieValidator()
 
     async def get_movies(self):
-        # todo фильтрация, пагинация
+        # todo сделать фильтрацию
         return await self.movie_repository.get_all()
 
     async def create_movie(self, movie: MovieCreateRequestSchema):

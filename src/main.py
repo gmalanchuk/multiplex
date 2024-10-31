@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import FastAPI, APIRouter
+from fastapi_pagination import add_pagination
 from starlette import status
 from starlette.responses import JSONResponse
 
@@ -23,6 +24,7 @@ async def include_routers(routers: tuple) -> None:
         api_router.include_router(router)
 
     app.include_router(api_router)
+    add_pagination(app)
 
 
 @app.on_event("startup")

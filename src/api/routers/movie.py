@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+from fastapi_pagination import Page, paginate
 from starlette import status
 
 from src.api.schemas.movie import MovieResponseSchema, MovieCreateRequestSchema, MovieUpdateRequestSchema
@@ -10,11 +11,12 @@ from src.services.movie import MovieService
 movie_router = APIRouter(prefix="/v1/movies", tags=["Movies"])
 
 
-@movie_router.get(path="/", response_model=list[MovieResponseSchema])
+@movie_router.get(path="/", response_model=Page[MovieResponseSchema])
 async def get_movies(
         movie_service: Annotated[MovieService, Depends()],
 ):
-    return await movie_service.get_movies()
+    movies = await movie_service.get_movies()
+    return paginate(movies)
 
 
 @movie_router.post(path="/", response_model=MovieResponseSchema, status_code=status.HTTP_201_CREATED)
