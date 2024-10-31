@@ -10,7 +10,7 @@ class PostgresRepository(AbstractRepository):
 
     async def get_all(self):
         async with async_session() as session:
-            query = select(self.model)
+            query = select(self.model).order_by(self.model.id)
             result = await session.execute(query)
             return result.scalars().all()
 
