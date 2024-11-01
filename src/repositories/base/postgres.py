@@ -8,9 +8,9 @@ from src.repositories.base.abstract import AbstractRepository
 class PostgresRepository(AbstractRepository):
     model = type[Base]
 
-    async def get_all(self):
+    async def get_all(self, page: int, size: int):
         async with async_session() as session:
-            query = select(self.model).order_by(self.model.id)
+            query = select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id)
             result = await session.execute(query)
             return result.scalars().all()
 
