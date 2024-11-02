@@ -1,9 +1,11 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+from fastapi_filter import FilterDepends
 from starlette import status
 
 from src.api.schemas.movie import MovieResponseSchema, MovieCreateRequestSchema, MovieUpdateRequestSchema
+from src.filters.movie import MovieFilter
 from src.pagination import paginate
 
 from src.services.movie import MovieService
@@ -14,10 +16,11 @@ movie_router = APIRouter(prefix="/v1/movies", tags=["Movies"])
 @movie_router.get(path="/", response_model=list[MovieResponseSchema])
 async def get_movies(
         movie_service: Annotated[MovieService, Depends()],
-        pagination: tuple[int, int] = Depends(paginate)
+        pagination: tuple[int, int] = Depends(paginate),
+        filters: MovieFilter = FilterDepends(MovieFilter),
 ):
     page, size = pagination
-    return await movie_service.get_movies(page, size)
+    return await movie_service.get_movies(page, size, filters)
 
 
 @movie_router.post(path="/", response_model=MovieResponseSchema, status_code=status.HTTP_201_CREATED)

@@ -1,8 +1,8 @@
-from datetime import datetime, date
+from datetime import date
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 
 
 class AgeCategory(int, Enum):
@@ -13,19 +13,7 @@ class AgeCategory(int, Enum):
     eighteen = 18
 
 
-class BaseMovieSchema(BaseModel):
-    @field_validator('release_year', check_fields=False)
-    def validate_release_year(cls, release_year: int):
-        current_year = datetime.now().year
-        if release_year > current_year:
-            raise ValueError('Release year cannot be greater than the current year')
-        return release_year
-
-    class Config:
-        use_enum_values = True
-
-
-class MovieCreateRequestSchema(BaseMovieSchema):
+class MovieCreateRequestSchema(BaseModel):
     name: str
     description: str
     age_category: AgeCategory
@@ -34,8 +22,11 @@ class MovieCreateRequestSchema(BaseMovieSchema):
     rental_end_date: date
     duration: int
 
+    class Config:
+        use_enum_values = True
 
-class MovieUpdateRequestSchema(BaseMovieSchema):
+
+class MovieUpdateRequestSchema(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     age_category: Optional[AgeCategory] = None
@@ -43,6 +34,9 @@ class MovieUpdateRequestSchema(BaseMovieSchema):
     rental_start_date: Optional[date] = None
     rental_end_date: Optional[date] = None
     duration: Optional[int] = None
+
+    class Config:
+        use_enum_values = True
 
 
 class MovieResponseSchema(BaseModel):

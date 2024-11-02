@@ -1,5 +1,6 @@
 from src.api.schemas.movie import MovieCreateRequestSchema, MovieUpdateRequestSchema
 from src.exceptions import NotFoundException
+from src.filters.movie import MovieFilter
 from src.repositories.movie import MovieRepository
 from src.validators.movie import MovieValidator
 
@@ -9,9 +10,8 @@ class MovieService:
         self.movie_repository = MovieRepository()
         self.movie_validator = MovieValidator()
 
-    async def get_movies(self, page: int, size: int):
-        # todo сделать фильтрацию
-        return await self.movie_repository.get_all(page, size)
+    async def get_movies(self, page: int, size: int, filters: MovieFilter):
+        return await self.movie_repository.get_all(page, size, filters)
 
     async def create_movie(self, movie: MovieCreateRequestSchema):
         await self.movie_validator.movie_already_exists(movie_name=movie.name)

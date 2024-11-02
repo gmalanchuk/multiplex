@@ -1,3 +1,4 @@
+from fastapi_filter.contrib.sqlalchemy import Filter
 from sqlalchemy import select
 
 from src.database.models.base import Base
@@ -8,9 +9,9 @@ from src.repositories.base.abstract import AbstractRepository
 class PostgresRepository(AbstractRepository):
     model = type[Base]
 
-    async def get_all(self, page: int, size: int):
+    async def get_all(self, page: int, size: int, filters: Filter):
         async with async_session() as session:
-            query = select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id)
+            query = filters.filter(select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id))
             result = await session.execute(query)
             return result.scalars().all()
 
@@ -34,6 +35,7 @@ class PostgresRepository(AbstractRepository):
         for key, value in data.items():
             setattr(obj, key, value)
         async with async_session() as session:
+            session.add(obj)
             await session.commit()
         return obj
 

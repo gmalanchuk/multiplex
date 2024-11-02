@@ -18,4 +18,5 @@ class Movie(Base, TimeStampMixin):
     # todo рейтинг зрителей
     # todo рейтинг критиков
     # todo жанры
+    # todo какого числа станет доступен в прокате
     duration: Mapped[int] = mapped_column(nullable=False)
