@@ -48,3 +48,11 @@ class MovieResponseSchema(BaseModel):
     rental_start_date: date
     rental_end_date: date
     duration: int
+
+
+class PaginatedResponse(BaseModel):
+    items: list[MovieResponseSchema]
+    total: int
+    page: int
+    size: int
+    pages: int
