@@ -4,6 +4,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from src.api.schemas.pagination import PaginatedResponse
+
 
 class AgeCategory(int, Enum):
     zero = 0
@@ -50,9 +52,4 @@ class MovieResponseSchema(BaseModel):
     duration: int
 
 
-class PaginatedResponse(BaseModel):
-    items: list[MovieResponseSchema]
-    total: int
-    page: int
-    size: int
-    pages: int
+PaginatedMovieResponseSchema = PaginatedResponse[MovieResponseSchema]

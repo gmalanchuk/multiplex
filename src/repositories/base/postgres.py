@@ -9,9 +9,10 @@ from src.repositories.base.abstract import AbstractRepository
 class PostgresRepository(AbstractRepository):
     model = type[Base]
 
-    async def get_all(self, page: int, size: int, filters: Filter):
+    async def get_all(self, page: int, size: int, filters: Filter = None):
         async with async_session() as session:
-            query = filters.filter(select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id))
+            query = select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id)
+            query = filters.filter(query) if filters else query  # apply filters to the query if provided, otherwise leave the query unchanged
             result = await session.execute(query)
             return result.scalars().all()
 

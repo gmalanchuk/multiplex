@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends
 from fastapi_filter import FilterDepends
 from starlette import status
 
-from src.api.schemas.movie import MovieResponseSchema, MovieCreateRequestSchema, MovieUpdateRequestSchema, PaginatedResponse
+from src.api.schemas.movie import MovieResponseSchema, MovieCreateRequestSchema, MovieUpdateRequestSchema, \
+    PaginatedMovieResponseSchema
 from src.filters.movie import MovieFilter
 from src.pagination import get_pagination_params, paginate_response
 
@@ -13,7 +14,7 @@ from src.services.movie import MovieService
 movie_router = APIRouter(prefix="/v1/movies", tags=["Movies"])
 
 
-@movie_router.get(path="/", response_model=PaginatedResponse)
+@movie_router.get(path="/", response_model=PaginatedMovieResponseSchema)
 async def get_movies(
         movie_service: Annotated[MovieService, Depends()],
         pagination: tuple[int, int] = Depends(get_pagination_params),
@@ -21,7 +22,7 @@ async def get_movies(
 ):
     page, size = pagination
     movies = await movie_service.get_movies(page, size, filters)
-    return await paginate_response(movies, page, size)
+    return await paginate_response(movies, page, size, movie_service)
 
 
 @movie_router.post(path="/", response_model=MovieResponseSchema, status_code=status.HTTP_201_CREATED)
