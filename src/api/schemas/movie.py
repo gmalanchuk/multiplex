@@ -22,6 +22,7 @@ class MovieCreateRequestSchema(BaseModel):
     release_year: int
     rental_start_date: date
     rental_end_date: date
+    genres: list[str]
     duration: int
 
     class Config:
@@ -35,6 +36,7 @@ class MovieUpdateRequestSchema(BaseModel):
     release_year: Optional[int] = None
     rental_start_date: Optional[date] = None
     rental_end_date: Optional[date] = None
+    genres: Optional[list[str]] = None
     duration: Optional[int] = None
 
     class Config:
@@ -49,6 +51,7 @@ class MovieResponseSchema(BaseModel):
     release_year: int
     rental_start_date: date
     rental_end_date: date
+    genres: list[str]
     duration: int
 
 

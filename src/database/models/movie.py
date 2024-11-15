@@ -1,5 +1,6 @@
 from datetime import date
 
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped
 from sqlalchemy.testing.schema import mapped_column
 
@@ -17,6 +18,6 @@ class Movie(Base, TimeStampMixin):
     rental_end_date: Mapped[date] = mapped_column(nullable=False)
     # todo рейтинг зрителей
     # todo рейтинг критиков
-    # todo жанры
+    genres: Mapped[list[str]] = mapped_column(JSONB, nullable=False)
     # todo какого числа станет доступен в прокате
     duration: Mapped[int] = mapped_column(nullable=False)

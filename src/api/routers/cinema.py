@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends
 from starlette import status
 
@@ -13,7 +11,7 @@ cinema_router = APIRouter(prefix="/v1/cinemas", tags=["Cinemas"])
 
 @cinema_router.get(path="/", response_model=PaginatedCinemaResponseSchema)
 async def get_cinemas(
-        cinema_service: Annotated[CinemaService, Depends()],
+        cinema_service: CinemaService = Depends(),
         pagination: tuple[int, int] = Depends(get_pagination_params),
 ):
     page, size = pagination
@@ -24,6 +22,6 @@ async def get_cinemas(
 @cinema_router.post(path="/", response_model=CinemaResponseSchema, status_code=status.HTTP_201_CREATED)
 async def create_cinema(
         request_cinema: CinemaCreateRequestSchema,
-        cinema_service: Annotated[CinemaService, Depends()],
+        cinema_service: CinemaService = Depends(),
 ):
     return await cinema_service.create_cinema(request_cinema)

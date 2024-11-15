@@ -1,18 +1,22 @@
-from fastapi_filter.contrib.sqlalchemy import Filter
 from sqlalchemy import select
 
 from src.database.models.base import Base
 from src.database.session import async_session
+from src.filters.movie import BaseFilter
 from src.repositories.base.abstract import AbstractRepository
 
 
 class PostgresRepository(AbstractRepository):
     model = type[Base]
 
-    async def get_all(self, page: int, size: int, filters: Filter = None):
+    async def get_all(self, page: int, size: int, filters: BaseFilter):
         async with async_session() as session:
             query = select(self.model).offset((page - 1) * size).limit(size).order_by(self.model.id)
-            query = filters.filter(query) if filters else query  # apply filters to the query if provided, otherwise leave the query unchanged
+            filters = filters.to_dict()
+            if filters:
+                for key, value in filters.items():
+                    if value is not None: # todo по идее эта строчка не нужна
+                        query = query.filter(getattr(self.model, key) == value)
             result = await session.execute(query)
             return result.scalars().all()
 
