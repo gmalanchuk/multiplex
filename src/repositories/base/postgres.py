@@ -15,7 +15,10 @@ class PostgresRepository(AbstractRepository):
             filters = filters.to_dict()
             if filters:
                 for key, value in filters.items():
-                    if value is not None: # todo по идее эта строчка не нужна
+                    if key == 'genres' and isinstance(value, list):
+                        for genre in value:
+                            query = query.filter(self.model.genres.contains([genre]))
+                    else:
                         query = query.filter(getattr(self.model, key) == value)
             result = await session.execute(query)
             return result.scalars().all()
